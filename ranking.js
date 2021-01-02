@@ -66,7 +66,13 @@ module.exports = function (client) {
     //
     if (message.content.toLowerCase().startsWith(`${config.PREFIX}rank`)) {
       //get the rankuser
-      rankuser = message.mentions.users.first() || message.author;
+      let rankuser = message.mentions.users.first() || message.author;
+      client.points.ensure(`${message.guild.id}-${rankuser.id}`, {
+        user: message.author.id,
+        guild: message.guild.id,
+        points: 0,
+        level: 1
+      });
       //do some databasing
       const filtered = client.points.filter(p => p.guild === message.guild.id).array();
       const sorted = filtered.sort((a, b) => b.points - a.points);
